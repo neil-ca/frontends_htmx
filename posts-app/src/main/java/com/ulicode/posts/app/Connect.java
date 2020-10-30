@@ -12,10 +12,7 @@ public class Connect {
         Connection connection = null;
         try{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/testing","root","140216");
-            if(connection != null)
-            {
-                System.out.println("Connection Successfully");
-            }
+            
         }catch(SQLException e) {
             System.out.println(e);
         }
