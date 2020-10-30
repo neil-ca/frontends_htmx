@@ -2,6 +2,7 @@ package com.ulicode.posts.app;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -31,7 +32,22 @@ public class PostDAO {
     }
     
     public static void getPosts() {
-        
+        Connect db_connect = new Connect();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try(Connection connecttion = db_connect.get_connection()) {
+             String query = "SELECT * FROM posts";
+             ps = connecttion.prepareStatement(query);
+             rs = ps.executeQuery();
+             while(rs.next()) {
+                 System.out.println("ID: " + rs.getInt("id_post"));
+                 System.out.println("Post: " + rs.getString("post"));
+                 System.out.println("Author: "+ rs.getString("author_post"));
+                 System.out.println("Date: "+ rs.getString("date_post"));
+             }
+        }catch(SQLException e) {
+            System.out.println(e);
+        }
     }
     public static void deletePost(int id_post) {
         

@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author erick
+ * @author ulises
  */
 public class postService {
     public static void createPost() {
@@ -22,7 +22,7 @@ public class postService {
         PostDAO.createPost(register);
     }
     public static void getPosts() {
-        
+        PostDAO.getPosts();
     }
     public static void deletePost() {
         

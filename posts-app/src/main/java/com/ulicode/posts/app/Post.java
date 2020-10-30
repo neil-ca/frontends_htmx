@@ -7,7 +7,7 @@ package com.ulicode.posts.app;
 
 /**
  *
- * @author erick
+ * @author ulises
  */
 public class Post {
     int id_post;
