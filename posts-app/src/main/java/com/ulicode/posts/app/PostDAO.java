@@ -50,7 +50,22 @@ public class PostDAO {
         }
     }
     public static void deletePost(int id_post) {
-        
+         Connect db_connect = new Connect();
+         
+         try(Connection connection = db_connect.get_connection()) {
+             PreparedStatement ps = null;
+             try {
+                 String query = "DELETE FROM posts WHERE id_post = ?";
+                 ps = connection.prepareStatement(query);
+                 ps.setInt(1, id_post);
+                 ps.executeUpdate();
+                 System.out.println("Post deleted");
+             }catch(SQLException e) {
+                 System.out.println(e);
+             }
+         }catch(SQLException e) {
+             System.out.println(e);
+         }
     }
     public static void updatePost(Post post) {
         

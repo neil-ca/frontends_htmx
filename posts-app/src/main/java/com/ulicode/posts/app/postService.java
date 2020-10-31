@@ -25,7 +25,10 @@ public class postService {
         PostDAO.getPosts();
     }
     public static void deletePost() {
-        
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Write the ID to delete");
+        int id_post = sc.nextInt();
+        PostDAO.deletePost(id_post);
     }
     public static void updatePost() {
         
