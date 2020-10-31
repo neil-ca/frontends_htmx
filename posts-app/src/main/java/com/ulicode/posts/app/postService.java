@@ -31,6 +31,14 @@ public class postService {
         PostDAO.deletePost(id_post);
     }
     public static void updatePost() {
-        
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Write your new post");
+        String post = sc.nextLine();
+        System.out.println("Write the ID of post to edit");
+        int id_post = sc.nextInt();
+        Post update = new Post();
+        update.setId_post((id_post));
+        update.setPost(post);
+        PostDAO.updatePost(update);
     }        
 }

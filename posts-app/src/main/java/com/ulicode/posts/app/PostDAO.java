@@ -68,6 +68,22 @@ public class PostDAO {
          }
     }
     public static void updatePost(Post post) {
-        
+        Connect db_connect = new Connect();
+         
+         try(Connection connection = db_connect.get_connection()) {
+             PreparedStatement ps = null;
+             try {
+                String query="UPDATE posts SET post = ? WHERE id_post = ?"; 
+                ps = connection.prepareStatement(query);
+                ps.setString(1, post.getPost());
+                ps.setInt(2, post.getId_post());
+                ps.executeUpdate();
+                 System.out.println("post updated!");
+             }catch(SQLException ex) {
+                 System.out.println(ex);
+             }
+         }catch(SQLException e) {
+             System.out.println(e);
+         }
     }
 }
