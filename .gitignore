@@ -1,2 +1,6 @@
+.gradle
 posts-app/target
 .settings
+
+app/bin
+app/build
