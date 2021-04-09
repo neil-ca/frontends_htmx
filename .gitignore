@@ -4,3 +4,6 @@ posts-app/target
 
 app/bin
 app/build
+app/.classpath
+app/.project
+
