@@ -26,6 +26,7 @@ dependencies {
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
 }
 
 application {
