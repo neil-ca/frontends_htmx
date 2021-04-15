@@ -1,5 +1,6 @@
 package posts.example.model;
 
+<<<<<<< HEAD
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +17,13 @@ public class Post {
         this.author_post = author_post;
         this.date_post = date_post;
     }
+=======
+public class Post {
+    int id_post;
+    String post;
+    String author_post;
+    String date_post;
+    public Post() {}
+>>>>>>> 00134bbd6c0022244367e55b118b6572eb2e8208
 }
 
