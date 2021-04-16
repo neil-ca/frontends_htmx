@@ -1,5 +1,5 @@
 applicationType: default
-defaultPackage: api.posts
+defaultPackage: market
 testFramework: junit
 sourceLanguage: java
 buildTool: gradle

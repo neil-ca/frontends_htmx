@@ -1,4 +1,4 @@
-package api.posts;
+package market;
 
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import javax.inject.Inject;
 
 @MicronautTest
-public class ApiPostsTest {
+class MarketTest {
 
     @Inject
     EmbeddedApplication<?> application;

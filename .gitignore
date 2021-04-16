@@ -1,5 +1,15 @@
-# Ignore Gradle project-specific cache directory
+Thumbs.db
+.DS_Store
 .gradle
-
-# Ignore Gradle build output directory
-build
+build/
+target/
+out/
+bin/
+.idea
+*.iml
+*.ipr
+*.iws
+.project
+.settings
+.classpath
+.factorypath

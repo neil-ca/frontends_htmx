@@ -1,4 +1,4 @@
-package api.posts;
+package market;
 
 import io.micronaut.runtime.Micronaut;
 

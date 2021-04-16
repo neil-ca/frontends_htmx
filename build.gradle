@@ -1,0 +1,45 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.0.0"
+        id("io.micronaut.application") version "1.5.0"
+}
+
+version = "0.1"
+group = "market"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+        testRuntime("junit5")
+        processing {
+            incremental(true)
+                annotations("market.*")
+        }
+}
+
+dependencies {
+    implementation("io.micronaut:micronaut-http-client")
+        implementation("io.micronaut:micronaut-runtime")
+        runtimeOnly("ch.qos.logback:logback-classic")
+        implementation("io.micronaut:micronaut-validation")
+        compileOnly 'org.projectlombok:lombok:1.18.20'
+        annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+        testCompileOnly 'org.projectlombok:lombok:1.18.20'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+}
+
+
+application {
+    mainClass.set("market.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("1.8")
+        targetCompatibility = JavaVersion.toVersion("1.8")
+}
+
+
+
