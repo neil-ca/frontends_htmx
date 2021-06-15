@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Table
 public class Producto {
     private Integer idProducto;
     private String nombre;
