@@ -1,4 +1,4 @@
-package market;
+package todo.app;
 
 import io.micronaut.runtime.Micronaut;
 
