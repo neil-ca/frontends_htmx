@@ -1,4 +1,5 @@
-## Micronaut 3.2.1 Documentation
+## Todo Application
+API que manejara la gestion de tareas y servira los datos en json
 
 - [User Guide](https://docs.micronaut.io/3.2.1/guide/index.html)
 - [API Reference](https://docs.micronaut.io/3.2.1/api/index.html)

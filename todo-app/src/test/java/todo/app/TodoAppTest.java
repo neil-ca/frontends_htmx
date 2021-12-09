@@ -15,6 +15,7 @@ class TodoAppTest {
 
     @Test
     void testItWorks() {
+
         Assertions.assertTrue(application.isRunning());
     }
 
