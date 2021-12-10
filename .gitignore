@@ -1,15 +1,44 @@
-Thumbs.db
-.DS_Store
-.gradle
-build/
-target/
-out/
-bin/
-.idea
-*.iml
-*.ipr
-*.iws
-.project
-.settings
-.classpath
-.factorypath
+server/Thumbs.db
+server/.DS_Store
+server/.gradle
+server/build/
+server/target/
+server/out/
+server/bin/
+server/.idea
+server/*.iml
+server/*.ipr
+server/*.iws
+server/.factorypath
+
+# dependencies
+client/node_modules
+client/.pnp
+client.pnp.js
+
+# testing
+client/coverage
+
+# next.js
+client/.next/
+client/out/
+
+# production
+client/build
+
+
+# debug
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+
+# local env files
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+client/.eslintrc.json
+
+# vercel
+client/.vercel
+
