@@ -18,7 +18,8 @@ client.pnp.js
 
 # testing
 client/coverage
-
+data/
+pg-init.d/
 # next.js
 client/.next/
 client/out/
