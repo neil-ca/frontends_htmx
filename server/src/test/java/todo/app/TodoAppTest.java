@@ -20,5 +20,8 @@ class TodoAppTest {
         assertTrue(application.isRunning());
         assertEquals(5, 5);
     }
+    @Test
+    void testDatabase() {
 
+    }
 }
