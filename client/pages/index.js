@@ -21,6 +21,9 @@ export default function Home() {
             <a className={styles.card}>Create task &rarr;</a>
           </Link>
 
+          <Link href={"/tasks"}>
+            <a className={styles.card}>Get tasks &rarr;</a>
+          </Link>
           <a href="https://nextjs.org/learn" className={styles.card}>
             <h2>Learn &rarr;</h2>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
