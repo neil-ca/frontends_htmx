@@ -5,7 +5,7 @@ import io.micronaut.data.annotation.MappedEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @MappedEntity
@@ -15,14 +15,25 @@ public class Task {
     private Long id;
     @NotNull
     private String title;
-//    @NotNull
-//    private String description;
-//    @NotNull
-//    private LocalDate limitDate;
-//    @NotNull
-//    private String owner;
-//    @NotNull
-//    private String tag;
-//    public Task() {
-//    }
+    @NotNull
+    private String description;
+    @NotNull
+    private int status;
+    @NotNull
+    private String limit_date;
+    private String owner;
+    private String tag;
+
+    public Task() {
+    }
+
+    public Task(Long id, String title, String description, int status, String limit_date, String owner, String tag) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.limit_date = limit_date;
+        this.owner = owner;
+        this.tag = tag;
+    }
 }

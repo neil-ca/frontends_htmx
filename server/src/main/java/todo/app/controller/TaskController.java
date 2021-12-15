@@ -1,5 +1,6 @@
 package todo.app.controller;
 
+import io.micronaut.context.annotation.Parameter;
 import io.micronaut.data.exceptions.DataAccessException;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpHeaders;
@@ -11,8 +12,8 @@ import io.micronaut.scheduling.annotation.ExecuteOn;
 import todo.app.model.Task;
 import todo.app.repository.TaskRepository;
 import todo.app.repository.TaskUpdateCommand;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,8 @@ public class TaskController {
 
     @Put
     public HttpResponse update(@Body @Valid TaskUpdateCommand command) {
-        taskRepository.update(command.getId(), command.getTitle());
+        taskRepository.update(command.getId(), command.getTitle(), command.getDescription(), command.getStatus(),
+                command.getLimit_date(), command.getOwner(), command.getTag());
         return HttpResponse
                 .noContent()
                 .header(HttpHeaders.LOCATION, location(command.getId()).getPath());
@@ -44,23 +46,23 @@ public class TaskController {
         return taskRepository.findAll(pageable).getContent();
     }
     @Post
-    public HttpResponse<Task> save(@Body("title") @NotBlank String title) {
-        Task task = taskRepository.save(title);
+    public HttpResponse<Task> save(@Body Task task) {
+        Task newTask = taskRepository.save(task);
         return  HttpResponse
-                .created(task)
+                .created(newTask)
                 .headers(headers -> headers.location(location(task.getId())));
     }
-    @Post("/ex")
-    public HttpResponse<Task> saveExceptions(@Body @NotBlank String title) {
-        try {
-            Task task = taskRepository.saveWithException(title);
-            return HttpResponse
-                    .created(task)
-                    .headers(headers -> headers.location(location(task.getId())));
-        } catch(DataAccessException e) {
-            return HttpResponse.noContent();
-        }
-    }
+//    @Post("/ex")
+//    public HttpResponse<Task> saveExceptions(@Body @NotBlank String title) {
+//        try {
+//            Task task = taskRepository.saveWithException(title);
+//            return HttpResponse
+//                    .created(task)
+//                    .headers(headers -> headers.location(location(task.getId())));
+//        } catch(DataAccessException e) {
+//            return HttpResponse.noContent();
+//        }
+//    }
 
     @Delete("/{id}")
     @Status(HttpStatus.NO_CONTENT)
