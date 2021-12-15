@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 
 //import static io.micronaut.data.model.query.builder.sql.Dialect.POSTGRES;
 
-@JdbcRepository(dialect = Dialect.H2)
+@JdbcRepository(dialect = Dialect.POSTGRES)
 public interface TaskRepository extends PageableRepository<Task, Long> {
     Task save(@NotNull @NotBlank String title);
 
