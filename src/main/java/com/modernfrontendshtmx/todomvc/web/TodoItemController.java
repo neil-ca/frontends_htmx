@@ -4,18 +4,19 @@ import com.modernfrontendshtmx.todomvc.TodoItem;
 import com.modernfrontendshtmx.todomvc.TodoItemNotFoundException;
 import com.modernfrontendshtmx.todomvc.TodoItemRepository;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
-import jakarta.validation.Valid;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxTrigger;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/todo")
@@ -38,6 +39,13 @@ public class TodoItemController {
     return "todo";
   }
 
+  @GetMapping("/activ-items-count")
+  @HxRequest
+  public String todoActiveItemsCount(Model model) {
+      model.addAttribute("numberOfActiveItems", getNumberOfActiveItems());
+      return "fragments :: active-items-count";
+  }
+
   @GetMapping("/completed")
   public String todoCompleted(Model model) {
     addAttributesForIndex(model, ListFilter.COMPLETED);
@@ -46,6 +54,7 @@ public class TodoItemController {
 
   @PostMapping
   @HxRequest
+  @HxTrigger("itemAdded")
   public String addNewTodoItem(TodoItemFormData formData, Model model) {
     TodoItem item = repository.save(new TodoItem(formData.getTitle(), false));
     model.addAttribute("item", toDto(item));
@@ -53,12 +62,15 @@ public class TodoItemController {
   }
 
   @PutMapping("/{id}/toggle")
-  public String toggleSelection(@PathVariable("id") Long id) {
+  @HxRequest
+  @HxTrigger("itemCompletionToggled")
+  public String toggleSelection(@PathVariable("id") Long id, Model model) {
     TodoItem todoItem = repository.findById(id).orElseThrow(
         () -> new TodoItemNotFoundException(id));
     todoItem.setCompleted(!todoItem.isCompleted());
     repository.save(todoItem);
-    return "redirect:/todo";
+    model.addAttribute("item", toDto(todoItem));
+    return "fragments :: todoItem";
   }
 
   @PutMapping("/toggle-all")
@@ -72,9 +84,12 @@ public class TodoItemController {
   }
 
   @DeleteMapping("/{id}")
+  @HxRequest
+  @ResponseBody
+  @HxTrigger("itemDeleted")
   public String deleteTodoItem(@PathVariable("id") Long id) {
     repository.deleteById(id);
-    return "redirect:/todo";
+    return "";
   }
 
   @DeleteMapping("/completed")

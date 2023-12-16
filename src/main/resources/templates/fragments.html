@@ -8,22 +8,44 @@ type="com.wimdeblauwe.examples.todomvcthymeleaf.todoitem.web.TodoItemController.
   <li
     th:fragment="todoItem(item)"
     th:classappend="${item.completed?'completed':''}"
+    th:id="|list-item-${item.id}|"
   >
     <div class="view">
-      <form th:action="@{/todo/{id}/toggle(id=${item.id})}" th:method="put">
-        <input
-          th:id="|toggle-checkbox-${item.id}|"
-          class="toggle"
-          type="checkbox"
-          onchange="this.form.requestSubmit()"
-          th:attrappend="checked=${item.completed?'true':null}"
-        />
-        <label th:text="${item.title}">Taste JavaScript</label>
-      </form>
-      <form th:action="@{/todo/{id}(id=${item.id})}" th:method="delete">
-        <button class="destroy"></button>
-      </form>
+      <input
+        th:id="|toggle-checkbox-${item.id}|"
+        class="toggle"
+        type="checkbox"
+        th:attrappend="checked=${item.completed ? 'true' : null}"
+        hx:put="@{/todo/{id}/toggle(id=${item.id})}"
+        hx:target="|#list-item-${item.id}|"
+        hx-trigger="click"
+        hx-swap="outerHTML"
+      />
+      <label th:text="${item.title}">Taste JavaScript</label>
+      <button
+        class="destroy"
+        hx:delete="@{/todo/{id}(id=${item.id})}"
+        hx:target="|#list-item-${item.id}|"
+        hx-trigger="click"
+        hx-swap="outerHTML"
+      ></button>
     </div>
-    <input class="edit" value="Create a TodoMVC template" />
+    <!-- <input class="edit" value="Create a TodoMVC template" /> -->
   </li>
+
+  <span
+    th:fragment="active-items-count"
+    hx:get="@{/active-items-count}"
+    hx-swap="outerHTML"
+    hx-trgger="itemAdded from:body, itemCompletionToggled from:body, itemDeleted from:body"
+  >
+    <th:block th:unless="${numberOfActiveItems == 1}">
+      <span class="todo-count"
+        ><strong th:text="${numberOfActiveItems}">0</strong> items left</span
+      >
+    </th:block>
+    <th:block th:if="${numberOfActiveItems == 1}">
+      <span class="todo-count"><strong>1</strong> item left</span>
+    </th:block>
+  </span>
 </html>
