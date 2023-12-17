@@ -1,0 +1,44 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  xmlns:hx="http://www.w3.org/1999/xhtml"
+>
+  <body>
+    <div layout:fragment="content" class="container mx-auto max-w-2xl my-4">
+      <div class="flex justify-between mb-4">
+        <h1 class="text-3xl">Timesheets</h1>
+        <div>
+          <div class="text-sm text-gray-400 uppercase">Total</div>
+          <div id="overall-total" class="text-2xl">0</div>
+        </div>
+      </div>
+      <div>
+        <div class="grid grid-cols-9 mb-2 gap-x-2">
+          <div class="font-bold col-span-2">Projects</div>
+          <div th:each="day : ${days}">
+            <div class="flex justify-center">
+              <div th:text="${#temporals.format(day, 'ddMMM')}"></div>
+            </div>
+          </div>
+        </div>
+        <div
+          th:each="project : ${projects}"
+          class="grid grid-cols-9 mb-2 gap-x-2"
+        >
+          <div
+            th:text="${project.name()}"
+            class="flex items-center col-span-2"
+          ></div>
+          <div th:each="day : ${days}">
+            <div>
+              <input class="bg-gray-100 border-2 border-gray-300 w-full" type="text" name="value" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
