@@ -39,7 +39,7 @@ public class TodoItemController {
     return "todo";
   }
 
-  @GetMapping("/activ-items-count")
+  @GetMapping("/active-items-count")
   @HxRequest
   public String todoActiveItemsCount(Model model) {
       model.addAttribute("numberOfActiveItems", getNumberOfActiveItems());

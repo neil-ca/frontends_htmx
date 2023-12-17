@@ -35,7 +35,7 @@ type="com.wimdeblauwe.examples.todomvcthymeleaf.todoitem.web.TodoItemController.
 
   <span
     th:fragment="active-items-count"
-    hx:get="@{/active-items-count}"
+    hx:get="@{/todo/active-items-count}"
     hx-swap="outerHTML"
     hx-trgger="itemAdded from:body, itemCompletionToggled from:body, itemDeleted from:body"
   >
