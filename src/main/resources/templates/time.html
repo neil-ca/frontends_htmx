@@ -12,11 +12,31 @@
         <h1 class="text-3xl">Timesheets</h1>
         <div>
           <div class="text-sm text-gray-400 uppercase">Total</div>
-          <div id="overall-total" class="text-2xl">0</div>
+          <div
+            id="overall-total"
+            class="text-2xl"
+            th:text="${total}"
+            hx-swap-oob="true"
+          >
+            0
+          </div>
         </div>
       </div>
       <div>
         <div class="grid grid-cols-9 mb-2 gap-x-2">
+          <div class="col-span-2"></div>
+          <div th:each="day : ${days}">
+            <div class="flex justify-center">
+              <div
+                th:fragment="day-total"
+                hx-swap-oob="true"
+                th:id="${'dayTotal_' + #temporals.format(day, 'yyyyMMdd')}"
+                th:text="${__${'dayTotal_' + #temporals.format(day, 'yyyyMMdd')}__}"
+              >
+                0
+              </div>
+            </div>
+          </div>
           <div class="font-bold col-span-2">Projects</div>
           <div th:each="day : ${days}">
             <div class="flex justify-center">
@@ -34,7 +54,13 @@
           ></div>
           <div th:each="day : ${days}">
             <div>
-              <input class="bg-gray-100 border-2 border-gray-300 w-full" type="text" name="value" />
+              <input
+                class="bg-gray-100 border-2 border-gray-300 w-full"
+                type="text"
+                name="value"
+                hx:put="@{/time/projects/{projectId}/{date}(projectId=${project.id},date=${day})}"
+                hx-trigger="keyup changed delay:500ms"
+              />
             </div>
           </div>
         </div>
