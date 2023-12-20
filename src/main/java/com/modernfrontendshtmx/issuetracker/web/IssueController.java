@@ -59,6 +59,14 @@ public class IssueController {
     return "fragments :: issue-summary-view";
   }
 
+  @HxRequest
+  @GetMapping("/{key}/summary")
+  public String summaryView(@PathVariable("key") String key, Model model) {
+    Issue issue = getIssueUseCase.execute(key);
+    model.addAttribute("issue", issue);
+    return "fragments :: issue-summary-view";
+  }
+
   public static class SummaryUpdateFormData {
     @NotBlank private String summary;
 
