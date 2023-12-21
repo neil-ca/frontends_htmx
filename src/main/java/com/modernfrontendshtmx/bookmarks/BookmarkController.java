@@ -6,10 +6,13 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/bookmarks")
@@ -29,6 +32,14 @@ public class BookmarkController {
         Bookmark bookmark = addBookmark(formData);
         model.addAttribute("bookmark", bookmark);
         return "bookmark :: bookmark";
+    }
+
+    @HxRequest
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public String deleteBookmark(@PathVariable int id) {
+        bookmarkMap.remove(id);
+        return "";
     }
 
     private Bookmark addBookmark(CreateBookmarkFormData formData) {

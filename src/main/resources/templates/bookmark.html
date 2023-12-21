@@ -5,6 +5,10 @@
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layout/main}"
 >
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
   <body>
     <div layout:fragment="content" class="container mx-auto max-w-2xl">
       <h1 class="text-2xl mb-4">Bookmarks</h1>
@@ -59,10 +63,28 @@
             <span th:text="${bookmark.name()}"></span>
             <span>-</span>
             <span th:text="${bookmark.url()}" class="text-gray-500"></span>
+            <button
+              class="ml-4 rounded-full bg-red-400 px-2.5 py-1 text-sm"
+              hx:delete="@{/bookmarks/{id}(id=${bookmark.id()})}"
+              hx-target="closest .bookmark"
+              hx-swap="outerHTML"
+            >
+              Delete
+            </button>
+            <input class="delete-csrf-token" type="hidden" 
+                th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
           </div>
         </th:block>
       </div>
     </div>
-    <th:block layout:fragment="script-content"> </th:block>
+    <th:block layout:fragment="script-content">
+      <script th:inline="javascript">
+      const token = /*[[${_csrf.token}]]*/ 'sample-csrf-token';
+      const headerName = /*[[${_csrf.headerName}]]*/ 'X-Sample-CSRF-Header';
+      document.addEventListener('htmx:configRequest', (evt) => {
+        evt.detail.headers[headerName] = token;
+      });
+      </script>
+    </th:block>
   </body>
 </html>
