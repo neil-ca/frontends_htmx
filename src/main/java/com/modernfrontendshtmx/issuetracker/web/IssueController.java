@@ -2,6 +2,7 @@ package com.modernfrontendshtmx.issuetracker.web;
 
 import com.modernfrontendshtmx.issuetracker.Issue;
 import com.modernfrontendshtmx.issuetracker.usecase.GetIssueUseCase;
+import com.modernfrontendshtmx.issuetracker.usecase.ReorderSubtasksUseCase;
 import com.modernfrontendshtmx.issuetracker.usecase.UpdateSummaryUseCase;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IssueController {
   private final GetIssueUseCase getIssueUseCase;
   private final UpdateSummaryUseCase updateSummaryUseCase;
+  private final ReorderSubtasksUseCase reorderSubtasksUseCase;
 
   @GetMapping("/{key}")
   public String showIssue(@PathVariable("key") String key, Model model) {
@@ -67,6 +69,14 @@ public class IssueController {
     return "fragments :: issue-summary-view";
   }
 
+  @HxRequest
+  @PutMapping("/{key}/subtasks")
+  public String reorderSubtasks(@PathVariable("key") String key, int[] subTaskOrder,
+          Model model) {
+    Issue issue = reorderSubtasksUseCase.execute(key, subTaskOrder);
+    model.addAttribute("issue", issue);
+    return "issue :: subtask-items";
+  }
   public static class SummaryUpdateFormData {
     @NotBlank private String summary;
 

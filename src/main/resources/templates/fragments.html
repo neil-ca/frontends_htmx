@@ -3,8 +3,7 @@
   xmlns:th="http://www.thymeleaf.org"
   lang="en"
 >
-  <!--/*@thymesVar id="item"
-type="com.wimdeblauwe.examples.todomvcthymeleaf.todoitem.web.TodoItemController.TodoItemDto"*/-->
+  <!-- TodoItem -->
   <li
     th:fragment="todoItem(item)"
     th:classappend="${item.completed?'completed':''}"
@@ -55,6 +54,7 @@ type="com.wimdeblauwe.examples.todomvcthymeleaf.todoitem.web.TodoItemController.
     </div>
   </div>
 
+  <!-- Handling Error -->
   <template th:fragment="error-message" id="htmx-request-error">
     <div
       class="flex items-center bg-red-100 border-red-400 text-red-700"
@@ -114,6 +114,7 @@ type="com.wimdeblauwe.examples.todomvcthymeleaf.todoitem.web.TodoItemController.
     </div>
   </template>
 
+  <!-- Issue Tracker -->
   <div th:fragment="issue-type(issueType)">
     <th:block th:switch="${issueType.name()}">
       <div th:case="'BUG'" class="text-gray-700 flex gap-x-1 items- center">
@@ -193,7 +194,8 @@ type="com.wimdeblauwe.examples.todomvcthymeleaf.todoitem.web.TodoItemController.
   <div
     th:fragment="issue-summary-edit(issue)"
     id="summary-edit-form-wrapper"
-    th:x-data="'{cancelUrl: \'' + @{/issues/{key}/summary(key=${issue.key})} + '\'}'"
+    th:x-data="'{connectionFailure: false, cancelUrl: \'' +
+        @{/issues/{key}/summary(key=${issue.key})} + '\'}'"
   >
     <form
       id="summary-edit-form"
@@ -204,6 +206,9 @@ type="com.wimdeblauwe.examples.todomvcthymeleaf.todoitem.web.TodoItemController.
       hx-swap="outerHTML"
       hx-target="#summary-edit-form-wrapper"
       @keyup.escape="htmx.ajax('GET', cancelUrl, {target: '#summary-edit-form-wrapper', swap: 'outerHTML'})"
+      @htmx:timeout="connectionFailure = true"
+      @htmx:response-error="connectionFailure = true"
+      @htmx:send-error="connectionFailure = true"
     >
       <div
         class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
@@ -214,6 +219,9 @@ type="com.wimdeblauwe.examples.todomvcthymeleaf.todoitem.web.TodoItemController.
           autofocus
           class="block text-xl flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0"
         />
+      </div>
+      <div x-show="connectionFailure === true" class="text-red-500">
+        There was a problem updating the summary
       </div>
       <p
         th:if="${#fields.hasErrors('summary')}"
