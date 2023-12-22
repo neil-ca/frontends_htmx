@@ -12,9 +12,10 @@
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   </head>
-
   <body>
-    <main layout:fragment="content"></main>
+    <div class="container mx-auto max-w-2xl mt-4">
+      <main layout:fragment="content"></main>
+    </div>
 
     <script
       type="text/javascript"
