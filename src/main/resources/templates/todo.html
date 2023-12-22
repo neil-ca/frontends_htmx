@@ -10,6 +10,8 @@
     <title>Template • TodoMVC</title>
     <link rel="stylesheet" th:href="@{/webjars/todomvc-common/base.css}" />
     <link rel="stylesheet" th:href="@{/webjars/todomvc-app-css/index.css}" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   </head>
 
   <body>
@@ -18,8 +20,6 @@
         <h1>todos</h1>
         <form
           id="new-todo-form"
-          th:action="@{/todo}"
-          method="post"
           th:object="${item}"
           hx-target="#todo-list"
           hx-swap="beforeend"
@@ -148,5 +148,14 @@
         }
       });
     </script>
+    <th:block layout:fragment="script-content">
+      <script th:inline="javascript">
+        const token = /*[[${_csrf.token}]]*/ "sample-csrf-token";
+        const headerName = /*[[${_csrf.headerName}]]*/ "X-Sample-CSRF-Header";
+        document.addEventListener("htmx:configRequest", (evt) => {
+          evt.detail.headers[headerName] = token;
+        });
+      </script>
+    </th:block>
   </body>
 </html>

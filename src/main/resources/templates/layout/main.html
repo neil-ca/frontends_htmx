@@ -10,6 +10,8 @@
     <meta name="htmx-config" content='{"timeout": 1000}' />
     <title></title>
     <link rel="stylesheet" th:href="@{/css/application.css}" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   </head>
   <body>
     <main layout:fragment="content"></main>
@@ -26,7 +28,6 @@
       type="text/javascript"
       th:src="@{/webjars/sortablejs/Sortable.min.js}"
     ></script>
-    <th:block layout:fragment="script-content"> </th:block>
     <th:block layout:fragment="script-content">
       <script>
         let subtasks = document.getElementById("subtasks");
@@ -34,6 +35,15 @@
           animation: 150,
           ghostClass: "bg-blue-300",
           handle: ".sortable-handle",
+        });
+      </script>
+    </th:block>
+    <th:block layout:fragment="script-content">
+      <script th:inline="javascript">
+        const token = /*[[${_csrf.token}]]*/ "sample-csrf-token";
+        const headerName = /*[[${_csrf.headerName}]]*/ "X-Sample-CSRF-Header";
+        document.addEventListener("htmx:configRequest", (evt) => {
+          evt.detail.headers[headerName] = token;
         });
       </script>
     </th:block>
