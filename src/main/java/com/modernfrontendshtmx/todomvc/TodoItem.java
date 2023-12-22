@@ -11,16 +11,20 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TodoItem {
-  @Id @GeneratedValue private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-  @NotBlank private String title;
+    @NotBlank
+    private String title;
 
-  private boolean completed;
+    private boolean completed;
 
-  protected TodoItem() {}
+    protected TodoItem() {
+    }
 
-  public TodoItem(String title, boolean completed) {
-    this.title = title;
-    this.completed = completed;
-  }
+    public TodoItem(String title, boolean completed) {
+        this.title = title;
+        this.completed = completed;
+    }
 }

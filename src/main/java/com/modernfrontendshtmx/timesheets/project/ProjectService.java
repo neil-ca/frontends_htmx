@@ -11,20 +11,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectService {
-  private final Map<Integer, Project> projects = new HashMap<>();
+    private final Map<Integer, Project> projects = new HashMap<>();
 
-  public ProjectService() {
-    projects.putAll(
-        Stream
-            .of(new Project(1, "SaaS"), new Project(2, "Blog Platform"),
-                new Project(3, "Ecommerce"))
-            .collect(Collectors.toMap(Project::id, Function.identity())));
-  }
+    public ProjectService() {
+        projects.putAll(
+                Stream
+                        .of(new Project(1, "SaaS"), new Project(2, "Blog Platform"),
+                                new Project(3, "Ecommerce"))
+                        .collect(Collectors.toMap(Project::id, Function.identity())));
+    }
 
-  public List<Project> getProjects() {
-    return projects.values()
-        .stream()
-        .sorted(Comparator.comparing(Project::id))
-        .toList();
-  }
+    public List<Project> getProjects() {
+        return projects.values()
+                .stream()
+                .sorted(Comparator.comparing(Project::id))
+                .toList();
+    }
 }

@@ -9,24 +9,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TimeRegistrationService {
-  private final Map<ProjectDate, Duration> registrations = new HashMap<>();
+    private final Map<ProjectDate, Duration> registrations = new HashMap<>();
 
-  public void addOrUpdateRegistration(int projectId, LocalDate date,
-                                      Duration duration) {
-    registrations.put(new ProjectDate(projectId, date), duration);
-  }
+    public void addOrUpdateRegistration(int projectId, LocalDate date,
+            Duration duration) {
+        registrations.put(new ProjectDate(projectId, date), duration);
+    }
 
-  public Duration getTotal(Set<Integer> projectIds, Set<LocalDate> dates) {
-    return registrations.entrySet()
-        .stream()
-        .filter(entry
-                -> projectIds.contains(entry.getKey().projectId()) &&
-                       dates.contains(entry.getKey().date()))
-        .reduce(Duration.ZERO,
-                (duration, entry)
-                    -> duration.plus(entry.getValue()),
-                Duration::plus);
-  }
+    public Duration getTotal(Set<Integer> projectIds, Set<LocalDate> dates) {
+        return registrations.entrySet()
+                .stream()
+                .filter(entry -> projectIds.contains(entry.getKey().projectId()) &&
+                        dates.contains(entry.getKey().date()))
+                .reduce(Duration.ZERO,
+                        (duration, entry) -> duration.plus(entry.getValue()),
+                        Duration::plus);
+    }
 
-  private record ProjectDate(int projectId, LocalDate date) {}
+    private record ProjectDate(int projectId, LocalDate date) {
+    }
 }

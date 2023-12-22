@@ -8,11 +8,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="htmx-config" content='{"timeout": 1000}' />
-    <title></title>
     <link rel="stylesheet" th:href="@{/css/application.css}" />
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   </head>
+
   <body>
     <main layout:fragment="content"></main>
 
