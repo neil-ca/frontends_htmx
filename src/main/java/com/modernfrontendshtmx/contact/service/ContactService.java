@@ -21,4 +21,8 @@ public class ContactService {
         repository.save(contact);
         return contact;
     }
+
+    public List<Contact> searchContacts(String query) {
+        return repository.findAllWithNameContaining(query);
+    }
 }

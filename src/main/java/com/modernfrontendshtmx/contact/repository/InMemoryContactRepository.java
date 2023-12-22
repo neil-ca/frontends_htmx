@@ -40,4 +40,12 @@ public class InMemoryContactRepository implements ContactRepository {
     public void save(Contact contact) {
         values.put(contact.getId(), contact);
     }
+
+    @Override
+    public List<Contact> findAllWithNameContaining(String query) {
+        return values.values()
+                .stream()
+                .filter(contact -> contact.hasName(query))
+                .toList();
+    }
 }

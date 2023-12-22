@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/contacts")
@@ -20,8 +21,15 @@ public class ContactController {
     private final ContactService service;
 
     @GetMapping
-    public String viewContacts(Model model) {
-        List<Contact> contactList = service.getAll();
+    public String viewContacts(Model model,
+            @RequestParam(value = "q", required = false) String query) {
+        List<Contact> contactList;
+        if (query != null) {
+            model.addAttribute("contacts", query);
+            contactList = service.searchContacts(query);
+        } else {
+            contactList = service.getAll();
+        }
         model.addAttribute("contacts", contactList);
         return "contacts/list";
     }

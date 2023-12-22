@@ -10,4 +10,6 @@ public interface ContactRepository {
     List<Contact> findAll();
 
     void save(Contact contact);
+
+    List<Contact> findAllWithNameContaining(String query);
 }

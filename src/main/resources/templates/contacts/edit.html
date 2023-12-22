@@ -1,0 +1,42 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+>
+  <body>
+    <div layout:fragment="content">
+      <div class="sm:flex sm:items-center mb-4">
+        <div class="sm:flex-auto">
+          <h1 class="text-base font-semibold leading-6 text-gray-900">
+            New contact
+          </h1>
+          <p class="mt-2 text-sm text-gray-700">
+            Add a new contact to your list of contacts.
+          </p>
+        </div>
+      </div>
+      <form
+        th:action="@{/contacts/new}"
+        th:object="${formData}"
+        th:method="post"
+        class="flex flex-col gap-y-2"
+      >
+        <div
+          th:replace="~{fragments/forms :: textinput('Given Name', 'givenName')}"
+        ></div>
+        <div
+          th:replace="~{fragments/forms :: textinput('Family Name', 'familyName')}"
+        ></div>
+        <div
+          th:replace="~{fragments/forms :: textinput('Phone', 'phone')}"
+        ></div>
+        <div
+          th:replace="~{fragments/forms :: emailinput('Email', 'email')}"
+        ></div>
+        <button type="submit" class="button-primary mt-4">Save</button>
+      </form>
+    </div>
+  </body>
+</html>
