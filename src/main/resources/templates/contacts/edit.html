@@ -10,15 +10,21 @@
       <div class="sm:flex sm:items-center mb-4">
         <div class="sm:flex-auto">
           <h1 class="text-base font-semibold leading-6 text-gray-900">
-            New contact
+            <span th:if="${editMode.name() == 'CREATE'}">New contact</span>
+            <span th:if="${editMode.name() == 'UPDATE'}">Update contact</span>
           </h1>
           <p class="mt-2 text-sm text-gray-700">
-            Add a new contact to your list of contacts.
+            <span th:if="${editMode.name() == 'CREATE'}"
+              >Add a new contact to your list of contacts.</span
+            >
+            <span th:if="${editMode.name() == 'UPDATE'}"
+              >Update a contact from your list of contacts.</span
+            >
           </p>
         </div>
       </div>
       <form
-        th:action="@{/contacts/new}"
+        th:action="${editMode?.name() == 'UPDATE'} ? @{/contacts/{id}/edit(id=${formData.id})} : @{/contacts/new}"
         th:object="${formData}"
         th:method="post"
         class="flex flex-col gap-y-2"
@@ -37,6 +43,14 @@
         ></div>
         <button type="submit" class="button-primary mt-4">Save</button>
       </form>
+      <div th:if="${editMode?.name() == 'UPDATE'}" class="flex mt-8 gap-4">
+        <form th:action="@{/contacts/{id}/delete(id=${formData.id})}">
+          <button type="submit" class="button-primary-danger">
+            Delete Contact
+          </button>
+        </form>
+        <p><a href="/contacts" class="button-secondary">Back</a></p>
+      </div>
     </div>
   </body>
 </html>

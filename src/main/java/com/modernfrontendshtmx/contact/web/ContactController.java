@@ -20,47 +20,80 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/contacts")
 @RequiredArgsConstructor
 public class ContactController {
-    private final ContactService service;
+  private final ContactService service;
 
-    @GetMapping
-    public String viewContacts(Model model,
-            @RequestParam(value = "q", required = false) String query) {
-        List<Contact> contactList;
-        if (query != null) {
-            model.addAttribute("contacts", query);
-            contactList = service.searchContacts(query);
-        } else {
-            contactList = service.getAll();
-        }
-        model.addAttribute("contacts", contactList);
-        return "contacts/list";
+  @GetMapping
+  public String viewContacts(Model model,
+                             @RequestParam(value = "q",
+                                           required = false) String query) {
+    List<Contact> contactList;
+    if (query != null) {
+      model.addAttribute("contacts", query);
+      contactList = service.searchContacts(query);
+    } else {
+      contactList = service.getAll();
+    }
+    model.addAttribute("contacts", contactList);
+    return "contacts/list";
+  }
+
+  @GetMapping("/{id}")
+  public String viewContact(Model model, @PathVariable("id") long id) {
+    Contact contact = service.getContact(new ContactId(id));
+    model.addAttribute("contact", contact);
+    return "contacts/view";
+  }
+
+  @GetMapping("/new")
+  public String newContact(Model model) {
+    model.addAttribute("formData", new CreateContactFormData());
+    model.addAttribute("editMode", EditMode.CREATE);
+    return "contacts/edit";
+  }
+
+  @PostMapping("/new")
+  public String createNewContact(Model model,
+                                 @ModelAttribute("formData")
+                                 @Valid CreateContactFormData formData,
+                                 BindingResult bindingResult) {
+
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("editMode", EditMode.CREATE);
+      return "contacts/edit";
     }
 
-    @GetMapping("/{id}")
-    public String viewContact(Model model, @PathVariable("id") long id) {
-        Contact contact = service.getContact(new ContactId(id));
-        model.addAttribute("contact", contact);
-        return "contacts/view";
+    service.storeNewContact(formData.getGivenName(), formData.getFamilyName(),
+                            formData.getPhone(), formData.getEmail());
+
+    return "redirect:/contacts";
+  }
+
+  @GetMapping("/{id}/edit")
+  public String editContact(Model model, @PathVariable("id") long id) {
+    Contact contact = service.getContact(new ContactId(id));
+    model.addAttribute("formData", EditContactFormData.from(contact));
+    model.addAttribute("editMode", EditMode.UPDATE);
+    return "contacts/edit";
+  }
+
+  public String doEditContact(Model model, @PathVariable("id") long id,
+                              @ModelAttribute("formData")
+                              @Valid EditContactFormData formData,
+                              BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("editMode", EditMode.UPDATE);
+      return "contacts/edit";
     }
 
-    @GetMapping("/new")
-    public String newContact(Model model) {
-        model.addAttribute("formData", new CreateContactFormData());
-        return "contacts/edit";
-    }
+    service.updateContact(new ContactId(id), formData.getGivenName(),
+                          formData.getFamilyName(), formData.getPhone(),
+                          formData.getEmail());
+    return "redirect:/contacts";
+  }
 
-    @PostMapping("/new")
-    public String createNewContact(Model model,
-            @ModelAttribute("formData") @Valid CreateContactFormData formData,
-            BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return "contact/edit";
-        }
-
-        service.storeNewContact(formData.getGivenName(), formData.getFamilyName(),
-                formData.getPhone(), formData.getEmail());
-
-        return "redirect:/contacts";
-    }
+  @PostMapping("/{id}/delete")
+  public String deleteContact(@PathVariable("id") long id) {
+    service.deleteContact(new ContactId(id));
+    return "redirect:/contacts";
+  }
 }
