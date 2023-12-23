@@ -1,6 +1,7 @@
 package com.modernfrontendshtmx.contact.web;
 
 import com.modernfrontendshtmx.contact.Contact;
+import com.modernfrontendshtmx.contact.ContactId;
 import com.modernfrontendshtmx.contact.service.ContactService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +34,13 @@ public class ContactController {
         }
         model.addAttribute("contacts", contactList);
         return "contacts/list";
+    }
+
+    @GetMapping("/{id}")
+    public String viewContact(Model model, @PathVariable("id") long id) {
+        Contact contact = service.getContact(new ContactId(id));
+        model.addAttribute("contact", contact);
+        return "contacts/view";
     }
 
     @GetMapping("/new")

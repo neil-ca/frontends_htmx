@@ -1,6 +1,8 @@
 package com.modernfrontendshtmx.contact.service;
 
 import com.modernfrontendshtmx.contact.Contact;
+import com.modernfrontendshtmx.contact.ContactId;
+import com.modernfrontendshtmx.contact.ContactNotFoundException;
 import com.modernfrontendshtmx.contact.repository.ContactRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +26,10 @@ public class ContactService {
 
     public List<Contact> searchContacts(String query) {
         return repository.findAllWithNameContaining(query);
+    }
+
+    public Contact getContact(ContactId contactId) {
+        return repository.findById(contactId)
+            .orElseThrow(() -> new ContactNotFoundException(contactId));
     }
 }

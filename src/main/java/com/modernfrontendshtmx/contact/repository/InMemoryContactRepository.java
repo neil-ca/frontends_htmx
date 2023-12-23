@@ -5,6 +5,7 @@ import com.modernfrontendshtmx.contact.ContactId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -47,5 +48,10 @@ public class InMemoryContactRepository implements ContactRepository {
                 .stream()
                 .filter(contact -> contact.hasName(query))
                 .toList();
+    }
+
+    @Override
+    public Optional<Contact> findById(ContactId contactId) {
+        return Optional.ofNullable(values.get(contactId));
     }
 }
