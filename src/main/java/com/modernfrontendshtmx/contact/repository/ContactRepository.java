@@ -15,4 +15,6 @@ public interface ContactRepository {
     List<Contact> findAllWithNameContaining(String query);
 
     Optional<Contact> findById(ContactId contactId);
+
+    void deleteById(ContactId contactId);
 }

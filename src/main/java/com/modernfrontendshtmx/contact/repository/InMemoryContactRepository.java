@@ -14,44 +14,49 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class InMemoryContactRepository implements ContactRepository {
-    private final AtomicLong secuence = new AtomicLong();
-    private final Map<ContactId, Contact> values = new HashMap<>();
+  private final AtomicLong secuence = new AtomicLong();
+  private final Map<ContactId, Contact> values = new HashMap<>();
 
-    public InMemoryContactRepository() {
-        List.of(new Contact(nextId(), "Wim", "Deblauwe", "555-789-999",
-                "wim@example.com"),
-                new Contact(nextId(), "John", "Doe", "555-123-456",
+  public InMemoryContactRepository() {
+    List.of(new Contact(nextId(), "Wim", "Deblauwe", "555-789-999",
+                        "wim@example.com"),
+            new Contact(nextId(), "John", "Doe", "555-123-456",
                         "john@example.com"),
-                new Contact(nextId(), "Ada", "Lovelace", "555-873-321",
+            new Contact(nextId(), "Ada", "Lovelace", "555-873-321",
                         "ada@lovelace.com"))
-                .forEach(this::save);
-    }
+        .forEach(this::save);
+  }
 
-    @Override
-    public ContactId nextId() {
-        return new ContactId(secuence.incrementAndGet());
-    }
+  @Override
+  public ContactId nextId() {
+    return new ContactId(secuence.incrementAndGet());
+  }
 
-    @Override
-    public List<Contact> findAll() {
-        return List.copyOf(values.values());
-    }
+  @Override
+  public List<Contact> findAll() {
+    return List.copyOf(values.values());
+  }
 
-    @Override
-    public void save(Contact contact) {
-        values.put(contact.getId(), contact);
-    }
+  @Override
+  public void save(Contact contact) {
+    values.put(contact.getId(), contact);
+  }
 
-    @Override
-    public List<Contact> findAllWithNameContaining(String query) {
-        return values.values()
-                .stream()
-                .filter(contact -> contact.hasName(query))
-                .toList();
-    }
+  @Override
+  public List<Contact> findAllWithNameContaining(String query) {
+    return values.values()
+        .stream()
+        .filter(contact -> contact.hasName(query))
+        .toList();
+  }
 
-    @Override
-    public Optional<Contact> findById(ContactId contactId) {
-        return Optional.ofNullable(values.get(contactId));
-    }
+  @Override
+  public Optional<Contact> findById(ContactId contactId) {
+    return Optional.ofNullable(values.get(contactId));
+  }
+
+  @Override
+  public void deleteById(ContactId contactId) {
+    values.remove(contactId);
+  }
 }
