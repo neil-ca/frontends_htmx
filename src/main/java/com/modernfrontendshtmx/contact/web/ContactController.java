@@ -6,15 +6,19 @@ import com.modernfrontendshtmx.contact.service.ContactService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/contacts")
@@ -91,9 +95,13 @@ public class ContactController {
     return "redirect:/contacts";
   }
 
-  @PostMapping("/{id}/delete")
-  public String deleteContact(@PathVariable("id") long id) {
+  @DeleteMapping("/{id}")
+  public RedirectView deleteContact(@PathVariable("id") long id,
+                                    RedirectAttributes redirectAttributes) {
     service.deleteContact(new ContactId(id));
-    return "redirect:/contacts";
+    redirectAttributes.addFlashAttribute("successMessage", "Deleted Contact!");
+    RedirectView redirectView = new RedirectView("/contacts");
+    redirectView.setStatusCode(HttpStatus.SEE_OTHER);
+    return redirectView;
   }
 }

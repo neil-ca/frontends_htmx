@@ -17,7 +17,7 @@ public class EditContactFormData {
 
   public static EditContactFormData from(Contact contact) {
     EditContactFormData formData = new EditContactFormData();
-    formData.setId(contact.getId().value);
+    formData.setId(contact.getId().value());
     formData.setGivenName(contact.getGivenName());
     formData.setFamilyName(contact.getFamilyName());
     formData.setPhone(contact.getPhone());

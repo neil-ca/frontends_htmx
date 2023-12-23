@@ -44,11 +44,16 @@
         <button type="submit" class="button-primary mt-4">Save</button>
       </form>
       <div th:if="${editMode?.name() == 'UPDATE'}" class="flex mt-8 gap-4">
-        <form th:action="@{/contacts/{id}/delete(id=${formData.id})}">
-          <button type="submit" class="button-primary-danger">
-            Delete Contact
-          </button>
-        </form>
+        <button
+          type="submit"
+          class="button-primary-danger"
+          hx:confirm="|Are you sure you want to delete the contact ${formData.givenName} ${formData.familyName}?|"
+          hx:delete="@{/contacts/{id}(id=${formData.id})}"
+          hx-target="body"
+          hx-push-url="true"
+        >
+          Delete Contact
+        </button>
         <p><a href="/contacts" class="button-secondary">Back</a></p>
       </div>
     </div>
