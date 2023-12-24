@@ -52,7 +52,7 @@
   <!-- tag::emailinput[] -->
   <!-- tag::emailinputDiv[] -->
   <div
-    th:fragment="emailinput(labelText, fieldName)"
+    th:fragment="emailinput(labelText, fieldName, inlineValidationUrl)"
     th:id="|${fieldName}-form-element|"
     th:class="${cssClass}"
     th:x-data="|{showErrorIcon: ${#fields.hasErrors('__${fieldName}__')}}|"
@@ -75,6 +75,7 @@
         hx:get="${inlineValidationUrl?:null}"
         hx:select="|#${fieldName}-error|"
         hx:target="|#${fieldName}-error|"
+        hx:validate="${inlineValidationUrl != null}"
         hx-swap="outerHTML"
         hx-include="closest form"
         class="block w-full rounded-md border-0 py-1.5 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ring-1 ring-inset"

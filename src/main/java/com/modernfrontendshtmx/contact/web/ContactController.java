@@ -3,6 +3,7 @@ package com.modernfrontendshtmx.contact.web;
 import com.modernfrontendshtmx.contact.Contact;
 import com.modernfrontendshtmx.contact.ContactId;
 import com.modernfrontendshtmx.contact.service.ContactService;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -103,5 +104,16 @@ public class ContactController {
     RedirectView redirectView = new RedirectView("/contacts");
     redirectView.setStatusCode(HttpStatus.SEE_OTHER);
     return redirectView;
+  }
+
+  @GetMapping("/new")
+  @HxRequest
+  public String validateNewContact(Model model,
+                                   @ModelAttribute("formData")
+                                   @Valid CreateContactFormData formData,
+                                   BindingResult bindingResult) {
+    model.addAttribute("formData", formData);
+    model.addAttribute("editMode", EditMode.CREATE);
+    return "contacts/edit";
   }
 }
