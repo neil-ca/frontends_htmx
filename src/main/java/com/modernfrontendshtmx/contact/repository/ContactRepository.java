@@ -19,4 +19,6 @@ public interface ContactRepository {
   void deleteById(ContactId contactId);
 
   boolean existsByEmail(String email);
+
+  Page<Contact> findAllOrderedByName(int page, int size);
 }

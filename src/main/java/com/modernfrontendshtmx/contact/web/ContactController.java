@@ -2,6 +2,7 @@ package com.modernfrontendshtmx.contact.web;
 
 import com.modernfrontendshtmx.contact.Contact;
 import com.modernfrontendshtmx.contact.ContactId;
+import com.modernfrontendshtmx.contact.repository.Page;
 import com.modernfrontendshtmx.contact.service.ContactService;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
@@ -25,95 +26,97 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/contacts")
 @RequiredArgsConstructor
 public class ContactController {
-  private final ContactService service;
+    private final ContactService service;
 
-  @GetMapping
-  public String viewContacts(Model model,
-                             @RequestParam(value = "q",
-                                           required = false) String query) {
-    List<Contact> contactList;
-    if (query != null) {
-      model.addAttribute("contacts", query);
-      contactList = service.searchContacts(query);
-    } else {
-      contactList = service.getAll();
-    }
-    model.addAttribute("contacts", contactList);
-    return "contacts/list";
-  }
-
-  @GetMapping("/{id}")
-  public String viewContact(Model model, @PathVariable("id") long id) {
-    Contact contact = service.getContact(new ContactId(id));
-    model.addAttribute("contact", contact);
-    return "contacts/view";
-  }
-
-  @GetMapping("/new")
-  public String newContact(Model model) {
-    model.addAttribute("formData", new CreateContactFormData());
-    model.addAttribute("editMode", EditMode.CREATE);
-    return "contacts/edit";
-  }
-
-  @PostMapping("/new")
-  public String createNewContact(Model model,
-                                 @ModelAttribute("formData")
-                                 @Valid CreateContactFormData formData,
-                                 BindingResult bindingResult) {
-
-    if (bindingResult.hasErrors()) {
-      model.addAttribute("editMode", EditMode.CREATE);
-      return "contacts/edit";
+    @GetMapping
+    public String viewContacts(Model model,
+            @RequestParam(value = "q", required = false) String query,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+        List<Contact> contactList;
+        if (query != null) {
+            model.addAttribute("query", query);
+            contactList = service.searchContacts(query);
+        } else {
+            Page<Contact> contactsPage = service.getAll(page);
+            contactList = contactsPage.values();
+            model.addAttribute("page", contactsPage.number());
+            model.addAttribute("size", contactsPage.size());
+            model.addAttribute("totalElements", contactsPage.totalElements());
+        }
+        model.addAttribute("contacts", contactList);
+        return "contacts/list";
     }
 
-    service.storeNewContact(formData.getGivenName(), formData.getFamilyName(),
-                            formData.getPhone(), formData.getEmail());
-
-    return "redirect:/contacts";
-  }
-
-  @GetMapping("/{id}/edit")
-  public String editContact(Model model, @PathVariable("id") long id) {
-    Contact contact = service.getContact(new ContactId(id));
-    model.addAttribute("formData", EditContactFormData.from(contact));
-    model.addAttribute("editMode", EditMode.UPDATE);
-    return "contacts/edit";
-  }
-
-  public String doEditContact(Model model, @PathVariable("id") long id,
-                              @ModelAttribute("formData")
-                              @Valid EditContactFormData formData,
-                              BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      model.addAttribute("editMode", EditMode.UPDATE);
-      return "contacts/edit";
+    @GetMapping("/{id}")
+    public String viewContact(Model model, @PathVariable("id") long id) {
+        Contact contact = service.getContact(new ContactId(id));
+        model.addAttribute("contact", contact);
+        return "contacts/view";
     }
 
-    service.updateContact(new ContactId(id), formData.getGivenName(),
-                          formData.getFamilyName(), formData.getPhone(),
-                          formData.getEmail());
-    return "redirect:/contacts";
-  }
+    @GetMapping("/new")
+    public String newContact(Model model) {
+        model.addAttribute("formData", new CreateContactFormData());
+        model.addAttribute("editMode", EditMode.CREATE);
+        return "contacts/edit";
+    }
 
-  @DeleteMapping("/{id}")
-  public RedirectView deleteContact(@PathVariable("id") long id,
-                                    RedirectAttributes redirectAttributes) {
-    service.deleteContact(new ContactId(id));
-    redirectAttributes.addFlashAttribute("successMessage", "Deleted Contact!");
-    RedirectView redirectView = new RedirectView("/contacts");
-    redirectView.setStatusCode(HttpStatus.SEE_OTHER);
-    return redirectView;
-  }
+    @PostMapping("/new")
+    public String createNewContact(Model model,
+            @ModelAttribute("formData") @Valid CreateContactFormData formData,
+            BindingResult bindingResult) {
 
-  @GetMapping("/new")
-  @HxRequest
-  public String validateNewContact(Model model,
-                                   @ModelAttribute("formData")
-                                   @Valid CreateContactFormData formData,
-                                   BindingResult bindingResult) {
-    model.addAttribute("formData", formData);
-    model.addAttribute("editMode", EditMode.CREATE);
-    return "contacts/edit";
-  }
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("editMode", EditMode.CREATE);
+            return "contacts/edit";
+        }
+
+        service.storeNewContact(formData.getGivenName(), formData.getFamilyName(),
+                formData.getPhone(), formData.getEmail());
+
+        return "redirect:/contacts";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editContact(Model model, @PathVariable("id") long id) {
+        Contact contact = service.getContact(new ContactId(id));
+        model.addAttribute("formData", EditContactFormData.from(contact));
+        model.addAttribute("editMode", EditMode.UPDATE);
+        return "contacts/edit";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String doEditContact(Model model, @PathVariable("id") long id,
+            @ModelAttribute("formData") @Valid EditContactFormData formData,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("editMode", EditMode.UPDATE);
+            return "contacts/edit";
+        }
+
+        service.updateContact(new ContactId(id), formData.getGivenName(),
+                formData.getFamilyName(), formData.getPhone(),
+                formData.getEmail());
+        return "redirect:/contacts";
+    }
+
+    @DeleteMapping("/{id}")
+    public RedirectView deleteContact(@PathVariable("id") long id,
+            RedirectAttributes redirectAttributes) {
+        service.deleteContact(new ContactId(id));
+        redirectAttributes.addFlashAttribute("successMessage", "Deleted Contact!");
+        RedirectView redirectView = new RedirectView("/contacts");
+        redirectView.setStatusCode(HttpStatus.SEE_OTHER);
+        return redirectView;
+    }
+
+    @GetMapping("/new")
+    @HxRequest
+    public String validateNewContact(Model model,
+            @ModelAttribute("formData") @Valid CreateContactFormData formData,
+            BindingResult bindingResult) {
+        model.addAttribute("formData", formData);
+        model.addAttribute("editMode", EditMode.CREATE);
+        return "contacts/edit";
+    }
 }

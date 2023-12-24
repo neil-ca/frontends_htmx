@@ -83,6 +83,20 @@
                   </tr>
                 </tbody>
               </table>
+              <div class="flex justify-between mt-4">
+                <a
+                  th:href="${page > 0} ? @{/contacts(page=${page - 1})} : '#'"
+                  class="button-secondary w-32 text-center"
+                  th:classappend="${page == 0 ? 'disabled' : null}"
+                  >Previous</a
+                >
+                <a
+                  th:href="${(page + 1) * size < totalElements} ? @{/contacts(page=${page + 1})} : '#'"
+                  class="button-secondary w-32 text-center"
+                  th:classappend="${(page + 1) * size >= totalElements ? 'disabled' : null}"
+                  >Next</a
+                >
+              </div>
             </div>
           </div>
         </div>
