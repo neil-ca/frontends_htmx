@@ -32,18 +32,17 @@ public class ContactController {
     public String viewContacts(Model model,
             @RequestParam(value = "q", required = false) String query,
             @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
-        List<Contact> contactList;
+        Page<Contact> contactsPage;
         if (query != null) {
             model.addAttribute("query", query);
-            contactList = service.searchContacts(query);
+            contactsPage = service.searchContacts(query, page);
         } else {
-            Page<Contact> contactsPage = service.getAll(page);
-            contactList = contactsPage.values();
-            model.addAttribute("page", contactsPage.number());
-            model.addAttribute("size", contactsPage.size());
-            model.addAttribute("totalElements", contactsPage.totalElements());
+            contactsPage = service.getAll(page);
         }
-        model.addAttribute("contacts", contactList);
+        model.addAttribute("page", contactsPage.number());
+        model.addAttribute("size", contactsPage.size());
+        model.addAttribute("totalElements", contactsPage.totalElements());
+        model.addAttribute("contacts", contactsPage.values());
         return "contacts/list";
     }
 

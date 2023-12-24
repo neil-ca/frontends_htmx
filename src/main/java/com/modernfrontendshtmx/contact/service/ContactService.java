@@ -25,8 +25,8 @@ public class ContactService {
         return contact;
     }
 
-    public List<Contact> searchContacts(String query) {
-        return repository.findAllWithNameContaining(query);
+    public Page<Contact> searchContacts(String query, int page) {
+        return repository.findAllWithNameContaining(query, page, 10);
     }
 
     public Contact getContact(ContactId contactId) {

@@ -61,11 +61,19 @@ public class InMemoryContactRepository implements ContactRepository {
     }
 
     @Override
-    public List<Contact> findAllWithNameContaining(String query) {
-        return values.values()
+    public List<Contact> findAllWithNameContaining(String query, int page,
+            int size) {
+        List<Contact> unpaged = values.values()
                 .stream()
                 .filter(contact -> contact.hasName(query))
                 .toList();
+        List<Contact> contacts = unpaged.stream()
+                .sorted(Comparator.comparing(contact -> contact.getGivenName() + " " +
+                        contact.getFamilyName()))
+                .skip((long) page * size)
+                .limit(size)
+                .toList();
+        return new Page<>(contacts, page, size, unpaged.size());
     }
 
     @Override

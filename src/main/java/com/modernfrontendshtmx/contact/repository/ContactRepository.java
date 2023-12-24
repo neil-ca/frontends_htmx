@@ -6,19 +6,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContactRepository {
-  ContactId nextId();
+    ContactId nextId();
 
-  List<Contact> findAll();
+    List<Contact> findAll();
 
-  void save(Contact contact);
+    void save(Contact contact);
 
-  List<Contact> findAllWithNameContaining(String query);
+    Page<Contact> findAllWithNameContaining(String query, int page, int size);
 
-  Optional<Contact> findById(ContactId contactId);
+    Optional<Contact> findById(ContactId contactId);
 
-  void deleteById(ContactId contactId);
+    void deleteById(ContactId contactId);
 
-  boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 
-  Page<Contact> findAllOrderedByName(int page, int size);
+    Page<Contact> findAllOrderedByName(int page, int size);
 }
