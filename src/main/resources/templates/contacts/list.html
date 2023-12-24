@@ -81,6 +81,21 @@
                       >
                     </td>
                   </tr>
+                  <tr th:if="${(page + 1) * size < totalElements}">
+                    <td colspan="4">
+                      <div class="flex justify-center mt-4">
+                        <button
+                          class="button-secondary w-32 text-center"
+                          hx:get="@{/contacts(page=${page + 1})}"
+                          hx-select="tbody > tr"
+                          hx-target="closest tr"
+                          hx-swap="outerHTML"
+                        >
+                          Load more
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
               <div class="flex justify-between mt-4">
