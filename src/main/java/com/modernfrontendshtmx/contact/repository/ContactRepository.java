@@ -6,15 +6,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContactRepository {
-    ContactId nextId();
+  ContactId nextId();
 
-    List<Contact> findAll();
+  List<Contact> findAll();
 
-    void save(Contact contact);
+  void save(Contact contact);
 
-    List<Contact> findAllWithNameContaining(String query);
+  List<Contact> findAllWithNameContaining(String query);
 
-    Optional<Contact> findById(ContactId contactId);
+  Optional<Contact> findById(ContactId contactId);
 
-    void deleteById(ContactId contactId);
+  void deleteById(ContactId contactId);
+
+  boolean existsByEmail(String email);
 }

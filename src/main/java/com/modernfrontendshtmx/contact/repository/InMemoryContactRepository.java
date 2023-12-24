@@ -59,4 +59,10 @@ public class InMemoryContactRepository implements ContactRepository {
   public void deleteById(ContactId contactId) {
     values.remove(contactId);
   }
+
+  @Override
+  public boolean existsByEmail(String email) {
+    return values.values().stream().anyMatch(
+        contact -> contact.getEmail().equals(email));
+  }
 }

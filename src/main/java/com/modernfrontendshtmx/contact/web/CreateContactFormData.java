@@ -7,6 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@NoDuplicateContactsByEmail
 public class CreateContactFormData {
     @NotBlank
     private String givenName;

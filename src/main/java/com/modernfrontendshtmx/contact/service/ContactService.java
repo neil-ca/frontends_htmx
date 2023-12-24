@@ -45,4 +45,8 @@ public class ContactService {
   public void deleteContact(ContactId contactId) {
     repository.deleteById(contactId);
   }
+
+  public boolean contactWithEmailExists(String email) {
+      return repository.existsByEmail(email);
+  }
 }
