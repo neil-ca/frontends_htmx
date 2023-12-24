@@ -5,6 +5,7 @@ import com.modernfrontendshtmx.contact.ContactId;
 import com.modernfrontendshtmx.contact.repository.Page;
 import com.modernfrontendshtmx.contact.service.ContactService;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -46,7 +47,7 @@ public class ContactController {
         model.addAttribute("totalElements", contactsPage.totalElements());
         model.addAttribute("contacts", contactsPage.values());
 
-        if (htmxRequest.isHtmxRequest()) {
+        if (htmxRequest.isHtmxRequest() && !"delete-button".equals(htmxRequest.getTriggerId())) {
             return "contacts/list :: tbody";
         } else {
             return "contacts/list";
@@ -107,13 +108,20 @@ public class ContactController {
     }
 
     @DeleteMapping("/{id}")
-    public RedirectView deleteContact(@PathVariable("id") long id,
-            RedirectAttributes redirectAttributes) {
+    public HtmxResponse deleteContact(@PathVariable("id") long id,
+            RedirectAttributes redirectAttributes,
+            HtmxRequest htmxRequest) {
         service.deleteContact(new ContactId(id));
-        redirectAttributes.addFlashAttribute("successMessage", "Deleted Contact!");
-        RedirectView redirectView = new RedirectView("/contacts");
-        redirectView.setStatusCode(HttpStatus.SEE_OTHER);
-        return redirectView;
+
+        if ("delete-button".equals(htmxRequest.getTriggerId())) {
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Deleted Contact!");
+            RedirectView redirectView = new RedirectView("/contacts");
+            redirectView.setStatusCode(HttpStatus.SEE_OTHER);
+            return HtmxResponse.builder().view(redirectView).build();
+        } else {
+            return HtmxResponse.builder().build();
+        }
     }
 
     @GetMapping("/new")

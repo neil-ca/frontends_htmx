@@ -46,6 +46,7 @@
       <div th:if="${editMode?.name() == 'UPDATE'}" class="flex mt-8 gap-4">
         <button
           type="submit"
+          id="delete-button"
           class="button-primary-danger"
           hx:confirm="|Are you sure you want to delete the contact ${formData.givenName} ${formData.familyName}?|"
           hx:delete="@{/contacts/{id}(id=${formData.id})}"
