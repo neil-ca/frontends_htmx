@@ -61,7 +61,7 @@ public class InMemoryContactRepository implements ContactRepository {
     }
 
     @Override
-    public List<Contact> findAllWithNameContaining(String query, int page,
+    public Page<Contact> findAllWithNameContaining(String query, int page,
             int size) {
         List<Contact> unpaged = values.values()
                 .stream()

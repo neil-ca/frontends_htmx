@@ -4,6 +4,7 @@ import com.modernfrontendshtmx.contact.Contact;
 import com.modernfrontendshtmx.contact.ContactId;
 import com.modernfrontendshtmx.contact.repository.Page;
 import com.modernfrontendshtmx.contact.service.ContactService;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -31,7 +32,8 @@ public class ContactController {
     @GetMapping
     public String viewContacts(Model model,
             @RequestParam(value = "q", required = false) String query,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            HtmxRequest htmxRequest) {
         Page<Contact> contactsPage;
         if (query != null) {
             model.addAttribute("query", query);
@@ -43,7 +45,12 @@ public class ContactController {
         model.addAttribute("size", contactsPage.size());
         model.addAttribute("totalElements", contactsPage.totalElements());
         model.addAttribute("contacts", contactsPage.values());
-        return "contacts/list";
+
+        if (htmxRequest.isHtmxRequest()) {
+            return "contacts/list :: tbody";
+        } else {
+            return "contacts/list";
+        }
     }
 
     @GetMapping("/{id}")
