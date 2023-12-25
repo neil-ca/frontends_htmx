@@ -69,6 +69,18 @@
             ></path>
           </svg>
         </div>
+        <div class="mt-4 flex">
+          <div
+            id="archive-ui"
+            hx-target="this"
+            hx-swap="outerHTML"
+            class="h-8 w-80"
+          >
+            <button hx:post="@{/contacts/archives}" class="button-secondary">
+              Download archive
+            </button>
+          </div>
+        </div>
         <div class="mt-8 flow-root">
           <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div
