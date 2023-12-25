@@ -3,12 +3,17 @@ package com.modernfrontendshtmx.contact.web;
 import com.modernfrontendshtmx.contact.Contact;
 import com.modernfrontendshtmx.contact.ContactId;
 import com.modernfrontendshtmx.contact.repository.Page;
+import com.modernfrontendshtmx.contact.service.ArchiveId;
+import com.modernfrontendshtmx.contact.service.ArchiveProcessInfo;
+import com.modernfrontendshtmx.contact.service.Archiver;
 import com.modernfrontendshtmx.contact.service.ContactService;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -29,6 +34,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequiredArgsConstructor
 public class ContactController {
     private final ContactService service;
+    private final Archiver archiver;
 
     @GetMapping
     public String viewContacts(Model model,
@@ -47,7 +53,8 @@ public class ContactController {
         model.addAttribute("totalElements", contactsPage.totalElements());
         model.addAttribute("contacts", contactsPage.values());
 
-        if (htmxRequest.isHtmxRequest() && !"delete-button".equals(htmxRequest.getTriggerId())) {
+        if (htmxRequest.isHtmxRequest() &&
+                !"delete-button".equals(htmxRequest.getTriggerId())) {
             return "contacts/list :: tbody";
         } else {
             return "contacts/list";
@@ -132,5 +139,27 @@ public class ContactController {
         model.addAttribute("formData", formData);
         model.addAttribute("editMode", EditMode.CREATE);
         return "contacts/edit";
+    }
+
+    @PostMapping("/archives")
+    @HxRequest
+    public String createArchive(Model model) {
+        ArchiveId archiveId = archiver.startArchiving();
+        ArchiveProcessInfo processInfo = archiver.getArchiveProcessInfo(archiveId);
+        model.addAttribute("archiveId", archiveId.value());
+        model.addAttribute("status", processInfo.getStatus());
+        model.addAttribute("progress", processInfo.getProgress());
+        return "contacts/archive";
+    }
+
+    @GetMapping("/archives/{id}")
+    @HxRequest
+    public String getArchive(Model model, @PathVariable("id") UUID id) {
+        ArchiveId archiveId = new ArchiveId(id);
+        ArchiveProcessInfo processInfo = archiver.getArchiveProcessInfo(archiveId);
+        model.addAttribute("archiveId", archiveId.value());
+        model.addAttribute("status", processInfo.getStatus());
+        model.addAttribute("progress", processInfo.getProgress());
+        return "contacts/archive";
     }
 }

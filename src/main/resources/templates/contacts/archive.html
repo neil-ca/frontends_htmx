@@ -1,0 +1,32 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:hx="http://www.w3.org/1999/xhtml"
+>
+  <body>
+    <div id="archive-ui" hx-target="this" hx-swap="outerHTML" class="h-8 w-80">
+      <th:block th:if="${status.name() == 'RUNNING'}">
+        <div
+          hx:get="@{/contacts/archives/{id}(id=${archiveId})}"
+          hx-trigger="load delay:500ms"
+        >
+          <div id="progress-container" class="progress-container">
+            <div
+              id="progress-bar"
+              class="progress-bar"
+              th:aria-valuenow="${progress}"
+              th:style="|width:${progress}%|"
+            ></div>
+          </div>
+        </div>
+      </th:block>
+      <th:block th:if="${status.name() == 'COMPLETE'}">
+        <div>Completed.</div>
+      </th:block>
+      <th:block th:if="${status.name() == 'FAILED'}">
+        <div>Failed!</div>
+      </th:block>
+    </div>
+  </body>
+</html>
