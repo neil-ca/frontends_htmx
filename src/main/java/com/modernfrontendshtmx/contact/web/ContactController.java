@@ -10,11 +10,19 @@ import com.modernfrontendshtmx.contact.service.ContactService;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRequest;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -162,4 +170,22 @@ public class ContactController {
         model.addAttribute("progress", processInfo.getProgress());
         return "contacts/archive";
     }
+
+    @GetMapping("/archives/{id}")
+    public void downloadArchive(@PathVariable("id") UUID id, HttpServletResponse response) throws
+        ExecutionException, InterruptedException, IOException {
+            ArchiveId archiveId = new ArchiveId(id);
+            ArchiveProcessInfo processInfo = archiver.getArchiveProcessInfo(archiveId);
+            String archive = processInfo.getFuture().get();
+
+            ContentDisposition contentDisposition = ContentDisposition
+                .attachment()
+                .filename("archive.csv", StandardCharsets.UTF_8)
+                .build();
+
+            response.setContentType("text/csv");
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+            response.getOutputStream().write(archive.getBytes(StandardCharsets.UTF_8));
+            response.flushBuffer();
+        }
 }
