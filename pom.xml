@@ -72,6 +72,11 @@
             <artifactId>datafaker</artifactId>
             <version>2.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>github-api</artifactId>
+            <version>1.316</version>
+        </dependency>
         <!-- Web dependencies -->
         <dependency>
             <groupId>org.webjars.npm</groupId>
@@ -102,6 +107,11 @@
             <groupId>org.webjars.npm</groupId>
             <artifactId>sortablejs</artifactId>
             <version>1.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>shoelace-style__shoelace</artifactId>
+            <version>2.9.0</version>
         </dependency>
         <dependency>
             <groupId>io.github.wimdeblauwe</groupId>

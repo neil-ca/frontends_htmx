@@ -1,0 +1,35 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+>
+  <body>
+    <div layout:fragment="content" class="container mx-auto my-4">
+      <h1 class="text-xl">Release notes viewer</h1>
+      <div class="flex">
+        <div class="w-1/3 m-2">
+          <div>
+            <sl-tree id="repositories-tree" selection="leaf">
+              <sl-tree-item lazy
+                  hx-trigger="sl-lazy-load"
+                  hx:get="@{/github/repositories}"
+                  hx-swap="innerHTML">Github Repositories
+              </sl-tree-item>
+            </sl-tree>
+          </div>
+        </div>
+        <div class="w-2/3 m-2">
+          <div
+            id="release-notes-container"
+            class="p-4 bg-amber-50 prose prose-h2:mt-1"
+          >
+            <div>Select a version on the left to view the release notes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <th:block layout:fragment="script-content"> </th:block>
+  </body>
+</html>

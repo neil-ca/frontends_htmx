@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="htmx-config" content='{"timeout": 1000}' />
     <link rel="stylesheet" th:href="@{/css/application.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/shoelace-style__shoelace/dist/themes/light.css}">
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   </head>
@@ -59,6 +60,10 @@
     <script
       type="text/javascript"
       th:src="@{/webjars/sortablejs/Sortable.min.js}"
+    ></script>
+    <script
+      type="module"
+      th:src="@{/webjars/shoelace-style__shoelace/cdn/shoelace-autoloader.js}"
     ></script>
     <th:block layout:fragment="script-content">
       <script>

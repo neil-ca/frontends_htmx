@@ -1,0 +1,9 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <th:block th:fragment="repositories">
+    Github Repositories
+    <sl-tree-item th:each="repository : ${repositories}">
+      <span th:text="${repository}"></span>
+    </sl-tree-item>
+  </th:block>
+</html>

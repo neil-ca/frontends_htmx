@@ -4,5 +4,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: ["@tailwindcss/forms"],
+  plugins: ["@tailwindcss/forms", "@tailwindcss/typography"],
 };
