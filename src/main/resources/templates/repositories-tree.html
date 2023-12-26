@@ -6,4 +6,26 @@
       <span th:text="${repository}"></span>
     </sl-tree-item>
   </th:block>
+
+  <th:block th:fragment="repositories">
+    Github Repositories
+    <sl-tree-item
+      th:each="repository : ${repositories}"
+      lazy
+      hx-trigger="sl-lazy-load consume"
+      hx:get="@{/repositories/{name}/releases(name=${repository})}"
+    >
+      <span th:text="${repository}"></span>
+    </sl-tree-item>
+  </th:block>
+
+  <th:block th:fragment="releases">
+    <span th:text="${repositoryName}"></span>
+    <sl-tree-item th:if="${releases.empty}" disabled>
+      No releases found
+    </sl-tree-item>
+    <sl-tree-item th:each="release : ${releases}">
+      <span th:text="${release.name}"></span>
+    </sl-tree-item>
+  </th:block>
 </html>

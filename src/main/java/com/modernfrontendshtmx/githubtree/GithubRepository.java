@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
@@ -26,5 +27,16 @@ public class GithubRepository {
     List<String> repositories = gateway.getRepositories(USERNAME);
     model.addAttribute("repositories", repositories);
     return "repositories-tree :: repositories";
+  }
+
+  @HxRequest
+  @GetMapping("/repositories/{id}/releases")
+  public String repositoryReleasesTree(@PathVariable("id") String id,
+                                       Model model) {
+    List<GithubGateway.RepositoryRelease> releases =
+        gateway.getRepositoryReleases(USERNAME, id);
+    model.addAttribute("repositoryName", id);
+    model.addAttribute("releases", releases);
+    return "repositories-tree :: releases";
   }
 }
