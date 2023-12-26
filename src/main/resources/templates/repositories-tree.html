@@ -13,7 +13,7 @@
       th:each="repository : ${repositories}"
       lazy
       hx-trigger="sl-lazy-load consume"
-      hx:get="@{/repositories/{name}/releases(name=${repository})}"
+      hx:get="@{/github/repositories/{name}/releases(name=${repository})}"
     >
       <span th:text="${repository}"></span>
     </sl-tree-item>
@@ -24,8 +24,13 @@
     <sl-tree-item th:if="${releases.empty}" disabled>
       No releases found
     </sl-tree-item>
-    <sl-tree-item th:each="release : ${releases}">
+    <sl-tree-item
+      th:each="release : ${releases}"
+      hx-target="#release-notes-loading-indicator"
+      hx:get="@{/github/repositories/{name}/releases/{id}(name=${repositoryName},id=${release.id})}"
+    >
       <span th:text="${release.name}"></span>
     </sl-tree-item>
   </th:block>
+  <div th:fragment="release-body" th:utext="${releaseBody}"></div>
 </html>

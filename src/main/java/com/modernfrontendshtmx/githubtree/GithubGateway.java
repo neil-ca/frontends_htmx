@@ -42,5 +42,17 @@ public class GithubGateway {
     }
   }
 
+  public String getRepositoryRelease(String username, String repositoryName,
+                                     long releaseId) {
+    try {
+      GitHub github = GitHub.connectAnonymously();
+      GHUser neil = github.getUser(username);
+      GHRepository repository = neil.getRepository(repositoryName);
+      return repository.getRelease(releaseId).getBody();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   public record RepositoryRelease(long id, String name) {}
 }
