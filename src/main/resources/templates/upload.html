@@ -1,0 +1,29 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  xmlns:hx="http://www.w3.org/1999/xhtml"
+>
+  <body>
+    <div layout:fragment="content">
+      <div class="m-4">
+        <form
+          hx-encoding="multipart/form-data"
+          hx:post="@{/upload}"
+          hx-disabled-elt=".disable-during-request"
+          hx-swap="none"
+        >
+          <input
+            type="file"
+            name="file"
+            class="file-input file-input-bordered w-full max-w-xs disable-during-request"
+          />
+          <button class="btn btn-primary disable-during-request">Import</button>
+        </form>
+      </div>
+    </div>
+    <th:block layout:fragment="script-content"> </th:block>
+  </body>
+</html>
