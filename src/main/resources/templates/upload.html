@@ -29,11 +29,12 @@
           />
           <button class="btn btn-primary disable-during-request">Import</button>
         </form>
+        <div class="mt-4" sse-swap="progress-event"></div>
         <div class="text-gray-700 mt-4">Progress log:</div>
         <div
           id="progress-log"
           class="mt-4 p-2 h-96 font-mono bg-gray-700 text-gray-100 overflow-y-auto"
-          sse-swap="message"
+          sse-swap="log-event"
           hx-swap="beforeend"
           hx-on::after-settle="this.scrollTo(0, this.scrollHeight);"
         ></div>

@@ -33,7 +33,7 @@ public class SseBroker {
     }
 
     public Flux<List<ProgressEvent>> subscribeToUpdates() {
-        return this.eventPublisher.asFlux().buffer(Duration.ofSeconds(1));
+        return this.eventPublisher.asFlux().buffer(Duration.ofMillis(600));
     }
 
     private static Sinks.Many<ProgressEvent> createNewSink() {
