@@ -19,7 +19,8 @@
     </sl-tree-item>
     <sl-tree-item
       th:each="release : ${releases}"
-      hx-target="#release-notes-loading-indicator"
+      hx-target="#release-notes-container"
+      hx-indicator="#release-notes-loading-indicator"
       hx:get="@{/github/repositories/{name}/releases/{id}(name=${repositoryName},id=${release.id})}"
     >
       <span th:text="${release.name}"></span>

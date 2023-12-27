@@ -51,7 +51,7 @@ public class GithubRepository {
     String repositoryRelease =
         gateway.getRepositoryRelease(USERNAME, repositoryName, releaseId);
     model.addAttribute("releaseBody", renderMarkdown(repositoryRelease));
-    return "repository-tree :: release-body";
+    return "repositories-tree :: release-body";
   }
 
   private String renderMarkdown(String markdown) {
