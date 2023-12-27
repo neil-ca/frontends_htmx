@@ -1,17 +1,5 @@
 <!doctype html>
-<html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layout/main}"
->
-  <th:block th:fragment="repositories">
-    Github Repositories
-    <sl-tree-item th:each="repository : ${repositories}">
-      <span th:text="${repository}"></span>
-    </sl-tree-item>
-  </th:block>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <th:block th:fragment="repositories">
     Github Repositories
     <sl-tree-item

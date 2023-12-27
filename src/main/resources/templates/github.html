@@ -12,7 +12,8 @@
         <div class="w-1/3 m-2">
           <div>
             <sl-tree id="repositories-tree" selection="leaf">
-              <sl-tree-item lazy
+              <sl-tree-item
+                lazy
                 hx-trigger="sl-lazy-load"
                 hx:get="@{/github/repositories}"
                 hx-swap="innerHTML"

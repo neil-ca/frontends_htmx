@@ -14,11 +14,18 @@
           hx:post="@{/upload}"
           hx-disabled-elt=".disable-during-request"
           hx-swap="none"
+          hx-include=".post-csrf-token"
         >
           <input
             type="file"
             name="file"
             class="file-input file-input-bordered w-full max-w-xs disable-during-request"
+          />
+          <input
+            class="post-csrf-token"
+            type="hidden"
+            th:name="${_csrf.parameterName}"
+            th:value="${_csrf.token}"
           />
           <button class="btn btn-primary disable-during-request">Import</button>
         </form>
@@ -27,6 +34,8 @@
           id="progress-log"
           class="mt-4 p-2 h-96 font-mono bg-gray-700 text-gray-100 overflow-y-auto"
           sse-swap="message"
+          hx-swap="beforeend"
+          hx-on::after-settle="this.scrollTo(0, this.scrollHeight);"
         ></div>
       </div>
     </div>
