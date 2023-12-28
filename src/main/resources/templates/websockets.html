@@ -7,6 +7,30 @@
   xmlns:hx-on="http://www.w3.org/1999/xhtml"
 >
   <body>
+    <template>
+      <div
+        id="messages"
+        hx-swap-oob="beforeend"
+        th:fragment="incoming-message(message)"
+      >
+        <div class="chat chat-start">
+          <div class="chat-bubble" th:text="${message}">
+            Welcome to the chat!
+          </div>
+        </div>
+      </div>
+    </template>
+    <template>
+      <div
+        id="messages"
+        hx-swap-oob="beforeend"
+        th:fragment="user-message(message)"
+      >
+        <div class="chat chat-end">
+          <div class="chat-bubble" th:text="${message}"></div>
+        </div>
+      </div>
+    </template>
     <div layout:fragment="content">
       <div
         hx-ext="ws"
