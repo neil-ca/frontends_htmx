@@ -3,6 +3,7 @@ package com.modernfrontendshtmx.ssedemo;
 import com.modernfrontendshtmx.ssedemo.SseBroker.ProgressEvent;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -44,12 +45,16 @@ public class FileController {
 
     @GetMapping("/progress")
     public Flux<ServerSentEvent<String>> progress() {
-        Flux<List<SseBroker.ProgressEvent>> updates = broker.subscribeToUpdates();
-        return updates
-                .flatMap(events -> {
-                    return Flux.just(createLogEvent(events), createProgressEvent(events))
-                            .filter(Objects::nonNull);
-                })
+        Flux<ServerSentEvent<String>> heartbeat = Flux.interval(Duration.ofSeconds(5))
+                .map(it -> ServerSentEvent.<String>builder()
+                        .event("heartbeat")
+                        .build());
+        Flux<List<ProgressEvent>> updates = broker.subscribeToUpdates();
+        return Flux
+                .merge(heartbeat,
+                        updates.flatMap(events -> Flux.just(createLogEvent(events),
+                                createProgressEvent(events))
+                                .filter(Objects::nonNull)))
                 .doOnSubscribe(
                         subscription -> LOGGER.debug("Subscription: {}", subscription))
                 .doOnCancel(() -> LOGGER.debug("cancel"))
